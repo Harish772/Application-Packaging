@@ -1,0 +1,21 @@
+$scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
+
+$scriptname =  ($MyInvocation.MyCommand.Name) -replace ".ps1",""
+
+#Variable Declaration - Log File name
+$logfile = [string]$env:ProgramData + "\SCCMAPPLOGS\Minitab_Minitab_17.3.1_B01\Minitab_Minitab_17.3.1_B01-Install.log"
+
+#Variable Declaration - Log Folder
+$logpath = [string]$env:ProgramData + "\SCCMAPPLOGS\Minitab_Minitab_17.3.1_B01"
+
+$mini16log = [string]$env:ProgramData + "\SCCMAPPLOGS\Minitab_Minitab_17.3.1_B01\Minitab_Minitab_16.2.4_B01-Uninstall.log"
+
+$parentPackageName = $scriptpath.Substring($scriptpath.LastIndexOf("\") + 1)
+
+New-Item -ItemType Directory -Force -Path $logpath
+
+$datestring = [string](get-date -Format yyyyMMdd-HHmm)
+
+$var1 = "$scriptpath\Source\7z1801-x64.msi"
+
+Start-Process -FilePath "msiexec.exe" -ArgumentList "/i $var1 /qb! /l*v $logpath\7z-Uninstall.log " -Wait -Passthru
