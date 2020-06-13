@@ -1,0 +1,23 @@
+Write-Host "Installing $appScriptFilename.exe (Main)"
+
+$var1 = "$scriptpath\Source\1\Install.bat" 
+$install_exec = start-process "cmd.exe" "/c `"$var1`"" -Wait -Passthru
+
+try {$install_Exec}
+
+catch {
+    Write-Log "Error executing $scriptpath\$appScriptFilename, file likely missing"
+    exit 1603
+}
+$exitcode2 = $install_exec.ExitCode
+
+
+if (($exitcode2 -eq 0) -or ($exitcode2 -eq 3010) -or ($exitcode2 -eq 1641)) {
+
+    Write-Log ("$appScriptFilename.exe main install completed successfully with code: " + $exitcode2)
+}
+else {
+
+    Write-Log ("$appScriptFilename.exe install failed with code " + $exitcode2) -type Error
+    exit $exitcode2
+}
